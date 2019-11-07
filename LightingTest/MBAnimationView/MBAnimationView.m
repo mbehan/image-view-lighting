@@ -19,7 +19,7 @@
 	NSTimeInterval animationFrameDuration;
 	
 	NSInteger animationRepeatCount;
-    void (^complete)();
+    void (^complete)(void);
     
     BOOL retina;
 }
@@ -77,7 +77,7 @@
     imageView.image = image;
 }
 
--(void)playAnimation:(NSString *)animationName withRange:(NSRange)range numberPadding:(int)padding ofType:(NSString *)ext fps:(NSInteger)fps repeat:(int)repeat completion:(void (^)())completionBlock
+-(void)playAnimation:(NSString *)animationName withRange:(NSRange)range numberPadding:(int)padding ofType:(NSString *)ext fps:(NSInteger)fps repeat:(int)repeat completion:(void (^)(void))completionBlock
 {
     //set options
     animationRepeatCount = repeat;
@@ -89,7 +89,7 @@
     NSMutableArray *URLs = [[NSMutableArray alloc] initWithCapacity:range.length - range.location];
 	NSBundle* bundle = [NSBundle mainBundle];
     
-	for (int i = range.location; i < range.length; i++)
+	for (int i = (int) range.location; i < range.length; i++)
     {
         NSString *paddingFormat = [NSString stringWithFormat:@"%%0%dd", padding];
         NSString *suffix = [NSString stringWithFormat:paddingFormat, i];

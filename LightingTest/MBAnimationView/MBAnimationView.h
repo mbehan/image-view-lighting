@@ -20,7 +20,7 @@
 @property (nonatomic, readonly)NSInteger currentFrameNumber;
 @property (nonatomic, readonly) UIImage *currentFrameImage;
 
--(void)playAnimation:(NSString *)animationName withRange:(NSRange)range numberPadding:(int)padding ofType:(NSString *)ext fps:(NSInteger)fps repeat:(int)repeat completion:(void (^)())completionBlock;
+-(void)playAnimation:(NSString *)animationName withRange:(NSRange)range numberPadding:(int)padding ofType:(NSString *)ext fps:(NSInteger)fps repeat:(int)repeat completion:(void (^)(void))completionBlock;
 
 -(void)setImage:(UIImage *)image;
 
