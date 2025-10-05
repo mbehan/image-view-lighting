@@ -69,7 +69,7 @@
     imageView.backgroundColor = [UIColor clearColor];
     [self addSubview:imageView];
     
-    retina = ([[UIScreen mainScreen] respondsToSelector:@selector(scale)] && [[UIScreen mainScreen] scale] == 2.0);
+    retina = (self.traitCollection.displayScale > 1.0);
 }
 
 -(void)setImage:(UIImage *)image
@@ -136,7 +136,15 @@
 - (void) startAnimating
 {
     displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(update:)];
-    displayLink.frameInterval = 1;
+    if (@available(iOS 10.0, *)) {
+        // Use the display's native maximum frame rate (e.g., 60Hz, 120Hz on ProMotion)
+        displayLink.preferredFramesPerSecond = 0;
+    } else {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+        displayLink.frameInterval = 1;
+#pragma clang diagnostic pop
+    }
     [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 	currentFrame = 0;
 }

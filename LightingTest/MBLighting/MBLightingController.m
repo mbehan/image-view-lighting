@@ -8,6 +8,7 @@
 
 #import "MBLightingController.h"
 #import "MBLitAnimationView.h"
+#import <Metal/Metal.h>
 
 @interface MBLightingController ()
 {
@@ -67,9 +68,14 @@
     
     if(self)
     {
-        EAGLContext *myEAGLContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
+        id<MTLDevice> device = MTLCreateSystemDefaultDevice();
         NSDictionary *options = @{ kCIContextWorkingColorSpace : [NSNull null] };
-        coreImageContext = [CIContext contextWithEAGLContext:myEAGLContext options:options];
+        if (device) {
+            coreImageContext = [CIContext contextWithMTLDevice:device options:options];
+        } else {
+            // Fallback to CPU-based CIContext if Metal is unavailable
+            coreImageContext = [CIContext contextWithOptions:options];
+        }
         
         [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(updateLighting) userInfo:nil repeats:YES];
     }
@@ -77,3 +83,4 @@
 }
 
 @end
+
